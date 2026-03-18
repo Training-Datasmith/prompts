@@ -1,11 +1,14 @@
 <?php
 
+declare(strict_types=1);
+
 use Laravel\Prompts\Exceptions\NonInteractiveValidationException;
 use Laravel\Prompts\Key;
 use Laravel\Prompts\Prompt;
-use Laravel\Prompts\TextareaPrompt;
 
 use function Laravel\Prompts\textarea;
+
+use Laravel\Prompts\TextareaPrompt;
 
 it('returns the input', function () {
     Prompt::fake(['J', 'e', 's', 's', Key::ENTER, 'J', 'o', 'e', Key::CTRL_D]);

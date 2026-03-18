@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Laravel\Prompts\Output;
 
 use Symfony\Component\Console\Output\ConsoleOutput as SymfonyConsoleOutput;

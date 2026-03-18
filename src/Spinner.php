@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Laravel\Prompts;
 
 use Closure;
@@ -32,7 +34,7 @@ class Spinner extends Prompt
      */
     public function __construct(public string $message = '')
     {
-        //
+
     }
 
     /**

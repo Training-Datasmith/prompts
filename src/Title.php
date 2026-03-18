@@ -1,12 +1,14 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Laravel\Prompts;
 
 class Title extends Prompt
 {
     public function __construct(public string $title)
     {
-        //
+
     }
 
     /**

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 use function Laravel\Prompts\alert;
 use function Laravel\Prompts\error;
 use function Laravel\Prompts\info;

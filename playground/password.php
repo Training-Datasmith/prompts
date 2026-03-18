@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 use function Laravel\Prompts\password;
 
 require __DIR__.'/../vendor/autoload.php';

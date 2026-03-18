@@ -1,11 +1,14 @@
 <?php
 
+declare(strict_types=1);
+
 use Laravel\Prompts\Exceptions\NonInteractiveValidationException;
 use Laravel\Prompts\Key;
 use Laravel\Prompts\Prompt;
-use Laravel\Prompts\TextPrompt;
 
 use function Laravel\Prompts\text;
+
+use Laravel\Prompts\TextPrompt;
 
 afterEach(function () {
     Prompt::cancelUsing(null);

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Laravel\Prompts;
 
 use Closure;
@@ -164,7 +166,9 @@ class MultiSearchPrompt extends Prompt
             : array_key_exists($key, $this->values));
 
         if ($allMatchesSelected) {
-            $this->values = array_filter($this->values, fn (string $value): bool => $this->isList()
+            $this->values = array_filter(
+                $this->values,
+                fn (string $value): bool => $this->isList()
                 ? ! in_array($value, $this->matches)
                 : ! array_key_exists(array_search($value, $this->matches), $this->matches)
             );

@@ -1,11 +1,15 @@
 <?php
 
+declare(strict_types=1);
+
 use Laravel\Prompts\Exceptions\NonInteractiveValidationException;
 use Laravel\Prompts\Key;
-use Laravel\Prompts\NumberPrompt;
-use Laravel\Prompts\Prompt;
 
 use function Laravel\Prompts\number;
+
+use Laravel\Prompts\NumberPrompt;
+
+use Laravel\Prompts\Prompt;
 
 afterEach(function () {
     Prompt::cancelUsing(null);

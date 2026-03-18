@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Laravel\Prompts;
 
 use Closure;
@@ -111,7 +113,7 @@ class SuggestPrompt extends Prompt
             return $this->matches = array_values($matches instanceof Collection ? $matches->all() : $matches);
         }
 
-        return $this->matches = array_values(array_filter($this->options, fn(string $option) => str_starts_with(strtolower($option), strtolower($this->value()))));
+        return $this->matches = array_values(array_filter($this->options, fn (string $option) => str_starts_with(strtolower($option), strtolower($this->value()))));
     }
 
     /**

@@ -1,10 +1,14 @@
 <?php
 
+declare(strict_types=1);
+
 use Laravel\Prompts\Key;
-use Laravel\Prompts\PausePrompt;
-use Laravel\Prompts\Prompt;
 
 use function Laravel\Prompts\pause;
+
+use Laravel\Prompts\PausePrompt;
+
+use Laravel\Prompts\Prompt;
 
 it('continues after enter', function () {
     Prompt::fake([Key::ENTER]);

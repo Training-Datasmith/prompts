@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Laravel\Prompts\Support;
 
 class Logger
@@ -11,7 +13,7 @@ class Logger
      */
     public function __construct(protected string $identifier, protected $socket = null)
     {
-        //
+
     }
 
     /**

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Laravel\Prompts\Themes\Default;
 
 use Laravel\Prompts\SelectPrompt;
@@ -66,7 +68,8 @@ class SelectPromptRenderer extends Renderer implements Scrolling
                 $index = array_search($key, array_keys($prompt->options));
 
                 if ($prompt->state === 'cancel') {
-                    return $this->dim($prompt->highlighted === $index
+                    return $this->dim(
+                        $prompt->highlighted === $index
                         ? "› ● {$this->strikethrough($label)}  "
                         : "  ○ {$this->strikethrough($label)}  "
                     );

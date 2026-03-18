@@ -1,11 +1,14 @@
 <?php
 
+declare(strict_types=1);
+
+use function Laravel\Prompts\autocomplete;
+
 use Laravel\Prompts\AutoCompletePrompt;
 use Laravel\Prompts\Exceptions\NonInteractiveValidationException;
 use Laravel\Prompts\Key;
-use Laravel\Prompts\Prompt;
 
-use function Laravel\Prompts\autocomplete;
+use Laravel\Prompts\Prompt;
 
 it('accepts any input', function () {
     Prompt::fake(['B', 'l', 'a', 'c', 'k', Key::ENTER]);

@@ -1,10 +1,14 @@
 <?php
 
+declare(strict_types=1);
+
 use Laravel\Prompts\Key;
-use Laravel\Prompts\MultiSearchPrompt;
-use Laravel\Prompts\Prompt;
 
 use function Laravel\Prompts\multisearch;
+
+use Laravel\Prompts\MultiSearchPrompt;
+
+use Laravel\Prompts\Prompt;
 
 it('supports default results', function ($options, $expected) {
     Prompt::fake([

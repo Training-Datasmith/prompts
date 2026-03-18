@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Laravel\Prompts;
 
 class Note extends Prompt
@@ -9,7 +11,7 @@ class Note extends Prompt
      */
     public function __construct(public string $message, public ?string $type = null)
     {
-        //
+
     }
 
     /**

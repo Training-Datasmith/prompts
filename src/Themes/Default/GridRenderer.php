@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Laravel\Prompts\Themes\Default;
 
 use Laravel\Prompts\Grid;
@@ -30,13 +32,13 @@ class GridRenderer extends Renderer
 
         $rows = $this->buildRowsWithSeparators($grid->items, $columnCount);
 
-        $tableStyle = (new TableStyle)
+        $tableStyle = (new TableStyle())
             ->setHorizontalBorderChars('─')
             ->setVerticalBorderChars('│', '│')
             ->setCellRowFormat('<fg=default>%s</>')
             ->setCrossingChars('┼', '', '', '', '┤', '┘', '┴', '└', '├', '┌', '┬', '┐');
 
-        $buffered = new BufferedConsoleOutput;
+        $buffered = new BufferedConsoleOutput();
 
         (new SymfonyTable($buffered))
             ->setRows($rows)
@@ -84,7 +86,7 @@ class GridRenderer extends Renderer
 
         foreach ($chunks as $index => $chunk) {
             if ($index > 0) {
-                $rows[] = new TableSeparator;
+                $rows[] = new TableSeparator();
             }
 
             $rows[] = array_pad($chunk, $columnCount, '');

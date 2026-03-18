@@ -1,9 +1,10 @@
 <?php
 
+declare(strict_types=1);
+
 use Laravel\Prompts\Themes\Default\Concerns\InteractsWithStrings;
 
-$instance = new class
-{
+$instance = new class () {
     use InteractsWithStrings;
 
     protected int $minWidth = 0;

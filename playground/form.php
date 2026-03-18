@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 use function Laravel\Prompts\confirm;
 use function Laravel\Prompts\form;
 use function Laravel\Prompts\note;
@@ -85,7 +87,8 @@ $moreResponses = form()
         return $install;
     }, name: 'install')
     ->confirm('Finish installation?')
-    ->add(fn ($responses) => note(<<<EOT
+    ->add(fn ($responses) => note(
+        <<<EOT
     Installation complete!
 
     To get started, run:

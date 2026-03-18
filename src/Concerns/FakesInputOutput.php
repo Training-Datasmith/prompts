@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Laravel\Prompts\Concerns;
 
 use Laravel\Prompts\Output\BufferedConsoleOutput;
@@ -36,7 +38,7 @@ trait FakesInputOutput
 
         static::$terminal = $mock;
 
-        self::setOutput(new BufferedConsoleOutput);
+        self::setOutput(new BufferedConsoleOutput());
     }
 
     /**

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 use Laravel\Prompts\Prompt;
 
 use function Laravel\Prompts\spin;

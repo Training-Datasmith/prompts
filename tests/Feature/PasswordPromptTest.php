@@ -1,11 +1,15 @@
 <?php
 
+declare(strict_types=1);
+
 use Laravel\Prompts\Exceptions\NonInteractiveValidationException;
 use Laravel\Prompts\Key;
-use Laravel\Prompts\PasswordPrompt;
-use Laravel\Prompts\Prompt;
 
 use function Laravel\Prompts\password;
+
+use Laravel\Prompts\PasswordPrompt;
+
+use Laravel\Prompts\Prompt;
 
 it('returns the input', function () {
     Prompt::fake(['p', 'a', 's', 's', Key::ENTER]);

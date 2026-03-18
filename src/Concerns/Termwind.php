@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Laravel\Prompts\Concerns;
 
 use Laravel\Prompts\Output\BufferedConsoleOutput;
@@ -11,7 +13,7 @@ trait Termwind
 {
     protected function termwind(string $html)
     {
-        renderUsing($output = new BufferedConsoleOutput);
+        renderUsing($output = new BufferedConsoleOutput());
 
         render($html);
 

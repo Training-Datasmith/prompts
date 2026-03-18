@@ -1,11 +1,14 @@
 <?php
 
+declare(strict_types=1);
+
 use Laravel\Prompts\Exceptions\NonInteractiveValidationException;
 use Laravel\Prompts\Key;
 use Laravel\Prompts\Prompt;
-use Laravel\Prompts\SuggestPrompt;
 
 use function Laravel\Prompts\suggest;
+
+use Laravel\Prompts\SuggestPrompt;
 
 it('accepts any input', function () {
     Prompt::fake(['B', 'l', 'a', 'c', 'k', Key::ENTER]);

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Laravel\Prompts\Themes\Default\Concerns;
 
 use Laravel\Prompts\Prompt;
@@ -52,7 +54,8 @@ trait DrawsBoxes
         }
 
         $this->line($this->{$color}(' └'.str_repeat(
-            '─', $info ? ($width - mb_strwidth($this->stripEscapeSequences($info))) : ($width + 2)
+            '─',
+            $info ? ($width - mb_strwidth($this->stripEscapeSequences($info))) : ($width + 2)
         ).($info ? " {$info} " : '').'┘'));
 
         return $this;

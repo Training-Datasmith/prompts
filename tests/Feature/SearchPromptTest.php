@@ -1,11 +1,14 @@
 <?php
 
+declare(strict_types=1);
+
 use Laravel\Prompts\Exceptions\NonInteractiveValidationException;
 use Laravel\Prompts\Key;
 use Laravel\Prompts\Prompt;
-use Laravel\Prompts\SearchPrompt;
 
 use function Laravel\Prompts\search;
+
+use Laravel\Prompts\SearchPrompt;
 
 it('accepts a callback', function () {
     Prompt::fake(['u', 'e', Key::DOWN, Key::ENTER]);

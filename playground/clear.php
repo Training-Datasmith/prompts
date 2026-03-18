@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 use function Laravel\Prompts\clear;
 use function Laravel\Prompts\note;
 use function Laravel\Prompts\pause;

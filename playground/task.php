@@ -1,9 +1,13 @@
 <?php
 
-use Laravel\Prompts\Support\Logger;
+declare(strict_types=1);
 
 use function Laravel\Prompts\info;
+
 use function Laravel\Prompts\select;
+
+use Laravel\Prompts\Support\Logger;
+
 use function Laravel\Prompts\task;
 
 require __DIR__.'/../vendor/autoload.php';

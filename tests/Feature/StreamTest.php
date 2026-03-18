@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 use Laravel\Prompts\Prompt;
 use Laravel\Prompts\Stream;
 
@@ -45,7 +47,7 @@ it('accumulates the message property', function () {
 it('throws when prompt is called', function () {
     Prompt::fake();
 
-    $stream = new Stream;
+    $stream = new Stream();
     $stream->prompt();
 })->throws(RuntimeException::class, 'Stream cannot be prompted');
 

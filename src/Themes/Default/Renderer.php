@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Laravel\Prompts\Themes\Default;
 
 use Laravel\Prompts\Concerns\Colors;
@@ -21,7 +23,7 @@ abstract class Renderer implements \Stringable
      */
     public function __construct(protected Prompt $prompt)
     {
-        //
+
     }
 
     /**

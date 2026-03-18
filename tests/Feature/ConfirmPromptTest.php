@@ -1,11 +1,14 @@
 <?php
 
+declare(strict_types=1);
+
+use function Laravel\Prompts\confirm;
+
 use Laravel\Prompts\ConfirmPrompt;
 use Laravel\Prompts\Exceptions\NonInteractiveValidationException;
 use Laravel\Prompts\Key;
-use Laravel\Prompts\Prompt;
 
-use function Laravel\Prompts\confirm;
+use Laravel\Prompts\Prompt;
 
 it('confirms', function () {
     Prompt::fake([Key::ENTER]);

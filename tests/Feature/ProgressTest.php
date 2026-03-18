@@ -1,8 +1,10 @@
 <?php
 
-use Laravel\Prompts\Prompt;
+declare(strict_types=1);
 
 use function Laravel\Prompts\progress;
+
+use Laravel\Prompts\Prompt;
 
 it('renders a progress bar', function ($steps) {
     Prompt::fake();

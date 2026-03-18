@@ -1,8 +1,10 @@
 <?php
 
-use Laravel\Prompts\Prompt;
+declare(strict_types=1);
 
 use function Laravel\Prompts\clear;
+
+use Laravel\Prompts\Prompt;
 
 it('clears', function () {
     Prompt::fake();

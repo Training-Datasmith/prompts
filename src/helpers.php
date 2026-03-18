@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Laravel\Prompts;
 
 use Closure;
@@ -165,7 +167,7 @@ if (! function_exists(\Laravel\Prompts\clear::class)) {
      */
     function clear(): void
     {
-        (new Clear)->display();
+        (new Clear())->display();
     }
 }
 
@@ -391,7 +393,7 @@ if (! function_exists(\Laravel\Prompts\progress::class)) {
 if (! function_exists('\Laravel\Prompts\form')) {
     function form(): FormBuilder
     {
-        return new FormBuilder;
+        return new FormBuilder();
     }
 }
 
@@ -411,7 +413,7 @@ if (! function_exists(\Laravel\Prompts\stream::class)) {
      */
     function stream(): Stream
     {
-        return new Stream;
+        return new Stream();
     }
 }
 

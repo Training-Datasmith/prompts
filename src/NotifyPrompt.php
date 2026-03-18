@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Laravel\Prompts;
 
 use Symfony\Component\Process\ExecutableFinder;
@@ -17,7 +19,7 @@ class NotifyPrompt extends Prompt
         public string $sound = '',
         public string $icon = '',
     ) {
-        //
+
     }
 
     /**
@@ -56,7 +58,7 @@ class NotifyPrompt extends Prompt
      */
     protected function sendLinux(): bool
     {
-        $finder = new ExecutableFinder;
+        $finder = new ExecutableFinder();
 
         if ($finder->find('notify-send') !== null) {
             return $this->sendLinuxNotifySend();

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 use Laravel\Prompts\Prompt;
 use Laravel\Prompts\Support\Logger;
 use Laravel\Prompts\Task;

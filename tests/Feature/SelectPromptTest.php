@@ -1,11 +1,14 @@
 <?php
 
+declare(strict_types=1);
+
 use Laravel\Prompts\Exceptions\NonInteractiveValidationException;
 use Laravel\Prompts\Key;
 use Laravel\Prompts\Prompt;
-use Laravel\Prompts\SelectPrompt;
 
 use function Laravel\Prompts\select;
+
+use Laravel\Prompts\SelectPrompt;
 
 it('accepts an array of labels', function () {
     Prompt::fake([Key::DOWN, Key::ENTER]);

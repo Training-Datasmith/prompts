@@ -1,11 +1,16 @@
 <?php
 
-use Laravel\Prompts\Key;
-use Laravel\Prompts\Prompt;
+declare(strict_types=1);
 
 use function Laravel\Prompts\confirm;
 use function Laravel\Prompts\form;
+
+use Laravel\Prompts\Key;
+
 use function Laravel\Prompts\outro;
+
+use Laravel\Prompts\Prompt;
+
 use function Laravel\Prompts\text;
 
 it('can run multiple steps', function () {

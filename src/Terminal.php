@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Laravel\Prompts;
 
 use ReflectionClass;
@@ -42,7 +44,7 @@ class Terminal
      */
     public function __construct()
     {
-        $this->terminal = new SymfonyTerminal;
+        $this->terminal = new SymfonyTerminal();
     }
 
     /**
