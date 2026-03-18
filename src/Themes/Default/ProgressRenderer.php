@@ -55,8 +55,8 @@ class ProgressRenderer extends Renderer
                 )
                 ->when(
                     $progress->hint,
-                    fn () => $this->hint($progress->hint),
-                    fn () => $this->newLine() // Space for errors
+                    fn (): \Laravel\Prompts\Themes\Default\Renderer => $this->hint($progress->hint),
+                    fn (): \Laravel\Prompts\Themes\Default\Renderer => $this->newLine() // Space for errors
                 )
         };
     }

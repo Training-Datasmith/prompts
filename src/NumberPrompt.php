@@ -30,11 +30,9 @@ class NumberPrompt extends Prompt
         $this->min ??= PHP_INT_MIN;
         $this->max ??= PHP_INT_MAX;
 
-        $originalValidate = $this->validate;
-
         $this->validate = $this->wrapValidation($this->validate);
 
-        $this->on('key', function (string $key) {
+        $this->on('key', function (string $key): void {
             match ($key) {
                 Key::UP, Key::UP_ARROW => $this->increaseValue(),
                 Key::DOWN, Key::DOWN_ARROW => $this->decreaseValue(),

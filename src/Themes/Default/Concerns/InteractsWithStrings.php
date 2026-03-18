@@ -13,7 +13,7 @@ trait InteractsWithStrings
     {
         return max(
             $this->minWidth,
-            count($lines) > 0 ? max(array_map(fn ($line) => mb_strwidth($this->stripEscapeSequences($line)) + $padding, $lines)) : null
+            count($lines) > 0 ? max(array_map(fn ($line): int => mb_strwidth($this->stripEscapeSequences($line)) + $padding, $lines)) : null
         );
     }
 
@@ -36,10 +36,10 @@ trait InteractsWithStrings
         $text = preg_replace("/\e[^m]*m/", '', $text);
 
         // Strip Symfony named style tags.
-        $text = preg_replace("/<(info|comment|question|error)>(.*?)<\/\\1>/", '$2', $text);
+        $text = preg_replace("/<(info|comment|question|error)>(.*?)<\/\\1>/", '$2', (string) $text);
 
         // Strip Symfony inline style tags.
-        return preg_replace("/<(?:(?:[fb]g|options)=[a-z,;]+)+>(.*?)<\/>/i", '$1', $text);
+        return preg_replace("/<(?:(?:[fb]g|options)=[a-z,;]+)+>(.*?)<\/>/i", '$1', (string) $text);
     }
 
     /**
@@ -141,7 +141,7 @@ trait InteractsWithStrings
         $chars = [];
 
         foreach ($segments as $segment) {
-            $segmentChars = mb_str_split($segment['text']);
+            $segmentChars = mb_str_split((string) $segment['text']);
 
             foreach ($segmentChars as $char) {
                 $chars[] = ['char' => $char, 'codes' => $segment['codes']];

@@ -39,11 +39,11 @@ class SearchPrompt extends Prompt
             throw new InvalidArgumentException('Argument [required] must be true or a string.');
         }
 
-        $this->trackTypedValue(submit: false, ignore: fn ($key) => Key::oneOf([Key::HOME, Key::END, Key::CTRL_A, Key::CTRL_E], $key) && $this->highlighted !== null);
+        $this->trackTypedValue(submit: false, ignore: fn (string $key): bool => Key::oneOf([Key::HOME, Key::END, Key::CTRL_A, Key::CTRL_E], $key) && $this->highlighted !== null);
 
-        $this->initializeScrolling(null);
+        $this->initializeScrolling();
 
-        $this->on('key', fn ($key) => match ($key) {
+        $this->on('key', fn (string $key) => match ($key) {
             Key::UP, Key::UP_ARROW, Key::SHIFT_TAB, Key::CTRL_P => $this->highlightPrevious(count($this->matches), true),
             Key::DOWN, Key::DOWN_ARROW, Key::TAB, Key::CTRL_N => $this->highlightNext(count($this->matches), true),
             Key::oneOf([Key::HOME, Key::CTRL_A], $key) => $this->highlighted !== null ? $this->highlight(0) : null,

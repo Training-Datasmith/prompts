@@ -16,8 +16,8 @@ class NoteRenderer extends Renderer
         switch ($note->type) {
             case 'intro':
             case 'outro':
-                $lines = array_map(fn ($line) => " {$line} ", $lines);
-                $longest = max(array_map(fn ($line) => mb_strlen($line), $lines));
+                $lines = array_map(fn ($line): string => " {$line} ", $lines);
+                $longest = max(array_map(mb_strlen(...), $lines));
 
                 foreach ($lines as $line) {
                     $line = mb_str_pad($line, $longest, ' ');

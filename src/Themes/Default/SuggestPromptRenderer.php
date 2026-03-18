@@ -50,8 +50,8 @@ class SuggestPromptRenderer extends Renderer implements Scrolling
                 )
                 ->when(
                     $prompt->hint,
-                    fn () => $this->hint($prompt->hint),
-                    fn () => $this->newLine() // Space for errors
+                    fn (): \Laravel\Prompts\Themes\Default\Renderer => $this->hint($prompt->hint),
+                    fn (): \Laravel\Prompts\Themes\Default\Renderer => $this->newLine() // Space for errors
                 )
                 ->spaceForDropdown($prompt),
         };
@@ -99,7 +99,7 @@ class SuggestPromptRenderer extends Renderer implements Scrolling
         }
 
         return implode(PHP_EOL, $this->scrollbar(
-            array_map(function ($label, $key) use ($prompt) {
+            array_map(function (int|string $label, int|string $key) use ($prompt): string {
                 $label = $this->truncate($label, $prompt->terminal()->cols() - 12);
 
                 return $prompt->highlighted === $key

@@ -45,23 +45,23 @@ class SuggestPrompt extends Prompt
     ) {
         $this->options = $options instanceof Collection ? $options->all() : $options;
 
-        $this->initializeScrolling(null);
+        $this->initializeScrolling();
 
-        $this->on('key', fn ($key) => match ($key) {
+        $this->on('key', fn (string $key) => match ($key) {
             Key::UP, Key::UP_ARROW, Key::SHIFT_TAB, Key::CTRL_P => $this->highlightPrevious(count($this->matches()), true),
             Key::DOWN, Key::DOWN_ARROW, Key::TAB, Key::CTRL_N => $this->highlightNext(count($this->matches()), true),
             Key::oneOf([Key::HOME, Key::CTRL_A], $key) => $this->highlighted !== null ? $this->highlight(0) : null,
             Key::oneOf([Key::END, Key::CTRL_E], $key) => $this->highlighted !== null ? $this->highlight(count($this->matches()) - 1) : null,
             Key::ENTER => $this->selectHighlighted(),
             Key::oneOf([Key::LEFT, Key::LEFT_ARROW, Key::RIGHT, Key::RIGHT_ARROW, Key::CTRL_B, Key::CTRL_F], $key) => $this->highlighted = null,
-            default => (function () {
+            default => (function (): void {
                 $this->highlighted = null;
                 $this->matches = null;
                 $this->firstVisible = 0;
             })(),
         });
 
-        $this->trackTypedValue($default, ignore: fn ($key) => Key::oneOf([Key::HOME, Key::END, Key::CTRL_A, Key::CTRL_E], $key) && $this->highlighted !== null);
+        $this->trackTypedValue($default, ignore: fn (string $key): bool => Key::oneOf([Key::HOME, Key::END, Key::CTRL_A, Key::CTRL_E], $key) && $this->highlighted !== null);
     }
 
     /**
@@ -111,9 +111,7 @@ class SuggestPrompt extends Prompt
             return $this->matches = array_values($matches instanceof Collection ? $matches->all() : $matches);
         }
 
-        return $this->matches = array_values(array_filter($this->options, function ($option) {
-            return str_starts_with(strtolower($option), strtolower($this->value()));
-        }));
+        return $this->matches = array_values(array_filter($this->options, fn(string $option) => str_starts_with(strtolower($option), strtolower($this->value()))));
     }
 
     /**

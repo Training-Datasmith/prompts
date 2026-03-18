@@ -11,7 +11,7 @@ class Terminal
     /**
      * The initial TTY mode.
      */
-    protected ?string $initialTtyMode;
+    protected ?string $initialTtyMode = null;
 
     /**
      * Whether the terminal supports true color.
@@ -200,10 +200,10 @@ class Terminal
 
         preg_match_all('/rgb:([0-9a-f]+)\/([0-9a-f]+)\/([0-9a-f]+)/i', $response ?: '', $matches, PREG_SET_ORDER);
 
-        $parse = fn (array $m) => [
-            (int) (hexdec($m[1]) / (strlen($m[1]) === 4 ? 257 : 1)),
-            (int) (hexdec($m[2]) / (strlen($m[2]) === 4 ? 257 : 1)),
-            (int) (hexdec($m[3]) / (strlen($m[3]) === 4 ? 257 : 1)),
+        $parse = fn (array $m): array => [
+            (int) (hexdec((string) $m[1]) / (strlen((string) $m[1]) === 4 ? 257 : 1)),
+            (int) (hexdec((string) $m[2]) / (strlen((string) $m[2]) === 4 ? 257 : 1)),
+            (int) (hexdec((string) $m[3]) / (strlen((string) $m[3]) === 4 ? 257 : 1)),
         ];
 
         static::$foregroundColor = isset($matches[0]) ? $parse($matches[0]) : [204, 204, 204];

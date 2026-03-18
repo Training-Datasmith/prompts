@@ -47,11 +47,11 @@ class MultiSearchPrompt extends Prompt
         public ?Closure $transform = null,
         public string|Closure $info = '',
     ) {
-        $this->trackTypedValue(submit: false, ignore: fn ($key) => Key::oneOf([Key::SPACE, Key::HOME, Key::END, Key::CTRL_A, Key::CTRL_E], $key) && $this->highlighted !== null);
+        $this->trackTypedValue(submit: false, ignore: fn (string $key): bool => Key::oneOf([Key::SPACE, Key::HOME, Key::END, Key::CTRL_A, Key::CTRL_E], $key) && $this->highlighted !== null);
 
-        $this->initializeScrolling(null);
+        $this->initializeScrolling();
 
-        $this->on('key', fn ($key) => match ($key) {
+        $this->on('key', fn (string $key) => match ($key) {
             Key::UP, Key::UP_ARROW, Key::SHIFT_TAB => $this->highlightPrevious(count($this->matches), true),
             Key::DOWN, Key::DOWN_ARROW, Key::TAB => $this->highlightNext(count($this->matches), true),
             Key::oneOf(Key::HOME, $key) => $this->highlighted !== null ? $this->highlight(0) : null,
@@ -159,12 +159,12 @@ class MultiSearchPrompt extends Prompt
      */
     protected function toggleAll(): void
     {
-        $allMatchesSelected = Utils::allMatch($this->matches, fn ($label, $key) => $this->isList()
+        $allMatchesSelected = Utils::allMatch($this->matches, fn ($label, $key): bool => $this->isList()
             ? array_key_exists($label, $this->values)
             : array_key_exists($key, $this->values));
 
         if ($allMatchesSelected) {
-            $this->values = array_filter($this->values, fn ($value) => $this->isList()
+            $this->values = array_filter($this->values, fn (string $value): bool => $this->isList()
                 ? ! in_array($value, $this->matches)
                 : ! array_key_exists(array_search($value, $this->matches), $this->matches)
             );

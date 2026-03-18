@@ -122,7 +122,7 @@ trait Themes
      */
     protected function getRenderer(): callable
     {
-        $class = get_class($this);
+        $class = $this::class;
 
         return new (static::$themes[static::$theme][$class] ?? static::$themes['default'][$class])($this);
     }

@@ -128,7 +128,7 @@ abstract class Prompt
             $this->hideCursor();
             $this->render();
 
-            $result = $this->runLoop(function (string $key): ?Result {
+            return $this->runLoop(function (string $key): ?Result {
                 $continue = $this->handleKeyPress($key);
 
                 $this->render();
@@ -137,9 +137,8 @@ abstract class Prompt
                     if ($key === Key::CTRL_C) {
                         if (isset(static::$cancelUsing)) {
                             return Result::from((static::$cancelUsing)());
-                        } else {
-                            static::terminal()->exit();
                         }
+                        static::terminal()->exit();
                     }
 
                     if ($key === Key::CTRL_U && self::$revertUsing) {
@@ -152,8 +151,6 @@ abstract class Prompt
                 // Continue looping.
                 return null;
             });
-
-            return $result;
         } finally {
             $this->clearListeners();
         }
@@ -279,7 +276,7 @@ abstract class Prompt
      */
     protected function render(): void
     {
-        $this->terminal()->initDimensions();
+        static::terminal()->initDimensions();
 
         $frame = $this->renderTheme();
 
@@ -296,14 +293,14 @@ abstract class Prompt
             return;
         }
 
-        $terminalHeight = $this->terminal()->lines();
+        $terminalHeight = static::terminal()->lines();
         $previousFrameHeight = count(explode(PHP_EOL, $this->prevFrame));
         $renderableLines = array_slice(explode(PHP_EOL, $frame), abs(min(0, $terminalHeight - $previousFrameHeight)));
 
         $this->moveCursorToColumn(1);
         $this->moveCursorUp(min($terminalHeight, $previousFrameHeight) - 1);
         $this->eraseDown();
-        $this->output()->write(implode(PHP_EOL, $renderableLines));
+        static::output()->write(implode(PHP_EOL, $renderableLines));
 
         $this->prevFrame = $frame;
     }

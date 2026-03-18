@@ -105,7 +105,7 @@ class Progress extends Prompt
 
         if (function_exists('pcntl_signal')) {
             $this->originalAsync = pcntl_async_signals(true);
-            pcntl_signal(SIGINT, function () {
+            pcntl_signal(SIGINT, function (): void {
                 $this->state = 'cancel';
                 $this->render();
                 exit();

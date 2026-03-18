@@ -60,8 +60,8 @@ class MultiSearchPromptRenderer extends Renderer implements Scrolling
                 )
                 ->when(
                     $prompt->hint,
-                    fn () => $this->hint($prompt->hint),
-                    fn () => $this->newLine() // Space for errors
+                    fn (): \Laravel\Prompts\Themes\Default\Renderer => $this->hint($prompt->hint),
+                    fn (): \Laravel\Prompts\Themes\Default\Renderer => $this->newLine() // Space for errors
                 )
                 ->spaceForDropdown($prompt)
         };
@@ -110,7 +110,7 @@ class MultiSearchPromptRenderer extends Renderer implements Scrolling
         }
 
         return implode(PHP_EOL, $this->scrollbar(
-            array_map(function ($label, $key) use ($prompt) {
+            array_map(function (int|string $label, int|string $key) use ($prompt): string {
                 $label = $this->truncate($label, $prompt->terminal()->cols() - 12);
 
                 $index = array_search($key, array_keys($prompt->matches()));
@@ -143,7 +143,7 @@ class MultiSearchPromptRenderer extends Renderer implements Scrolling
         }
 
         return implode("\n", array_map(
-            fn ($label) => $this->truncate($label, $prompt->terminal()->cols() - 6),
+            fn (string $label): string => $this->truncate($label, $prompt->terminal()->cols() - 6),
             $prompt->labels()
         ));
     }
@@ -157,7 +157,7 @@ class MultiSearchPromptRenderer extends Renderer implements Scrolling
 
         $hiddenCount = count($prompt->value()) - count(array_filter(
             $prompt->matches(),
-            fn ($label, $key) => in_array($prompt->isList() ? $label : $key, $prompt->value()),
+            fn ($label, $key): bool => in_array($prompt->isList() ? $label : $key, $prompt->value()),
             ARRAY_FILTER_USE_BOTH
         ));
 

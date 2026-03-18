@@ -42,7 +42,7 @@ class AutoCompletePrompt extends Prompt
     ) {
         $this->options = $options instanceof Collection ? $options->all() : $options;
 
-        $this->on('key', function ($key) {
+        $this->on('key', function ($key): void {
             if (in_array($key, [Key::UP, Key::UP_ARROW])) {
                 $matches = $this->matches();
 
@@ -97,7 +97,7 @@ class AutoCompletePrompt extends Prompt
 
         $this->trackTypedValue(
             $default,
-            ignore: fn ($key) => in_array($key, [Key::UP, Key::UP_ARROW, Key::DOWN, Key::DOWN_ARROW]),
+            ignore: fn ($key): bool => in_array($key, [Key::UP, Key::UP_ARROW, Key::DOWN, Key::DOWN_ARROW]),
         );
     }
 
@@ -155,7 +155,7 @@ class AutoCompletePrompt extends Prompt
 
         return $this->matches = array_values(array_filter(
             $this->options,
-            fn ($option) => str_starts_with(strtolower($option), strtolower($this->value())),
+            fn (string $option): bool => str_starts_with(strtolower($option), strtolower($this->value())),
         ));
     }
 

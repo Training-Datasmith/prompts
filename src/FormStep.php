@@ -15,7 +15,7 @@ class FormStep
         protected readonly bool $ignoreWhenReverting,
     ) {
         $this->condition = is_bool($condition)
-            ? fn () => $condition
+            ? fn (): bool => $condition
             : $condition;
     }
 

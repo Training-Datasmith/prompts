@@ -108,7 +108,8 @@ class Key
         foreach ($keys as $key) {
             if (is_array($key) && static::oneOf($key, $match) !== null) {
                 return $match;
-            } elseif ($key === $match) {
+            }
+            if ($key === $match) {
                 return $match;
             }
         }

@@ -42,7 +42,7 @@ class TextareaPrompt extends Prompt
             allowNewLine: true,
         );
 
-        $this->on('key', function ($key) {
+        $this->on('key', function ($key): void {
             if ($key[0] === "\e") {
                 match ($key) {
                     Key::UP, Key::UP_ARROW, Key::CTRL_P => $this->handleUpKey(),
@@ -120,7 +120,7 @@ class TextareaPrompt extends Prompt
         $lines = $this->lines();
 
         // Line length + 1 for the newline character
-        $lineLengths = array_map(fn ($line, $index) => mb_strlen($line) + ($index === count($lines) - 1 ? 0 : 1), $lines, range(0, count($lines) - 1));
+        $lineLengths = array_map(fn ($line, $index): int => mb_strlen((string) $line) + ($index === count($lines) - 1 ? 0 : 1), $lines, range(0, count($lines) - 1));
 
         $currentLineIndex = $this->currentLineIndex();
 
@@ -152,7 +152,7 @@ class TextareaPrompt extends Prompt
         $lines = $this->lines();
 
         // Line length + 1 for the newline character
-        $lineLengths = array_map(fn ($line, $index) => mb_strlen($line) + ($index === count($lines) - 1 ? 0 : 1), $lines, range(0, count($lines) - 1));
+        $lineLengths = array_map(fn ($line, $index): int => mb_strlen((string) $line) + ($index === count($lines) - 1 ? 0 : 1), $lines, range(0, count($lines) - 1));
 
         $currentLineIndex = $this->currentLineIndex();
 
@@ -211,7 +211,7 @@ class TextareaPrompt extends Prompt
     {
         $totalLineLength = 0;
 
-        return (int) Utils::search($this->lines(), function ($line) use (&$totalLineLength) {
+        return (int) Utils::search($this->lines(), function ($line) use (&$totalLineLength): bool {
             $totalLineLength += mb_strlen($line) + 1;
 
             return $totalLineLength > $this->cursorPosition;

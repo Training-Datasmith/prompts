@@ -27,7 +27,7 @@ class TextareaPromptRenderer extends Renderer implements Scrolling
             'cancel' => $this
                 ->box(
                     $this->truncate($prompt->label, $prompt->width),
-                    implode(PHP_EOL, array_map(fn ($line) => $this->strikethrough($this->dim($line)), $prompt->lines())),
+                    implode(PHP_EOL, array_map(fn (string $line): string => $this->strikethrough($this->dim($line)), $prompt->lines())),
                     color: 'red',
                 )
                 ->error($prompt->cancelMessage),
@@ -49,8 +49,8 @@ class TextareaPromptRenderer extends Renderer implements Scrolling
                 )
                 ->when(
                     $prompt->hint,
-                    fn () => $this->hint($prompt->hint),
-                    fn () => $this->newLine() // Space for errors
+                    fn (): \Laravel\Prompts\Themes\Default\Renderer => $this->hint($prompt->hint),
+                    fn (): \Laravel\Prompts\Themes\Default\Renderer => $this->newLine() // Space for errors
                 )
         };
     }

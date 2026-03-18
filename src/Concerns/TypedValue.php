@@ -105,7 +105,7 @@ trait TypedValue
             ? [$this->trimWidthBackwards($before, 0, $spaceBefore - 1), true]
             : [$before, false];
 
-        $spaceAfter = $maxWidth < 0 || $maxWidth === null ? mb_strwidth($after) : $maxWidth - ($wasTruncatedBefore ? 1 : 0) - mb_strwidth($truncatedBefore) - mb_strwidth($cursor);
+        $spaceAfter = $maxWidth < 0 || $maxWidth === null ? mb_strwidth($after) : $maxWidth - ($wasTruncatedBefore ? 1 : 0) - mb_strwidth((string) $truncatedBefore) - mb_strwidth($cursor);
         [$truncatedAfter, $wasTruncatedAfter] = mb_strwidth($after) > $spaceAfter
             ? [mb_strimwidth($after, 0, $spaceAfter - 1), true]
             : [$after, false];

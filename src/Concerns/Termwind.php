@@ -18,7 +18,7 @@ trait Termwind
         return $this->restoreEscapeSequences($output->fetch());
     }
 
-    protected function restoreEscapeSequences(string $string)
+    protected function restoreEscapeSequences(string $string): ?string
     {
         return preg_replace('/\[(\d+)m/', "\e[".'\1m', $string);
     }

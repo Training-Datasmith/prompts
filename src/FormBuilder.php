@@ -64,7 +64,7 @@ class FormBuilder
             $wasReverted = false;
 
             $index > 0
-                ? Prompt::revertUsing(function () use (&$wasReverted) {
+                ? Prompt::revertUsing(function () use (&$wasReverted): void {
                     $wasReverted = true;
                 }) : Prompt::preventReverting();
 

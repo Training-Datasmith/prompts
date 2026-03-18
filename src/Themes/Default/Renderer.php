@@ -6,7 +6,7 @@ use Laravel\Prompts\Concerns\Colors;
 use Laravel\Prompts\Concerns\Truncation;
 use Laravel\Prompts\Prompt;
 
-abstract class Renderer
+abstract class Renderer implements \Stringable
 {
     use Colors;
     use Truncation;
@@ -93,7 +93,7 @@ abstract class Renderer
     /**
      * Render the output with a blank line above and below.
      */
-    public function __toString()
+    public function __toString(): string
     {
         return str_repeat(PHP_EOL, max(2 - $this->prompt->newLinesWritten(), 0))
             .$this->output

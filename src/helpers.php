@@ -159,7 +159,7 @@ if (! function_exists('\Laravel\Prompts\pause')) {
     }
 }
 
-if (! function_exists('\Laravel\Prompts\clear')) {
+if (! function_exists(\Laravel\Prompts\clear::class)) {
     /**
      * Clear the terminal.
      */
@@ -250,7 +250,7 @@ if (! function_exists('\Laravel\Prompts\spin')) {
     }
 }
 
-if (! function_exists('\Laravel\Prompts\note')) {
+if (! function_exists(\Laravel\Prompts\note::class)) {
     /**
      * Display a note.
      */
@@ -336,7 +336,7 @@ if (! function_exists('\Laravel\Prompts\notify')) {
     }
 }
 
-if (! function_exists('\Laravel\Prompts\table')) {
+if (! function_exists(\Laravel\Prompts\table::class)) {
     /**
      * Display a table.
      *
@@ -349,7 +349,7 @@ if (! function_exists('\Laravel\Prompts\table')) {
     }
 }
 
-if (! function_exists('\Laravel\Prompts\grid')) {
+if (! function_exists(\Laravel\Prompts\grid::class)) {
     /**
      * Display a grid.
      *
@@ -361,7 +361,7 @@ if (! function_exists('\Laravel\Prompts\grid')) {
     }
 }
 
-if (! function_exists('\Laravel\Prompts\progress')) {
+if (! function_exists(\Laravel\Prompts\progress::class)) {
     /**
      * Display a progress bar.
      *
@@ -395,7 +395,7 @@ if (! function_exists('\Laravel\Prompts\form')) {
     }
 }
 
-if (! function_exists('\Laravel\Prompts\title')) {
+if (! function_exists(\Laravel\Prompts\title::class)) {
     /**
      * Update the title of the terminal.
      */
@@ -405,7 +405,7 @@ if (! function_exists('\Laravel\Prompts\title')) {
     }
 }
 
-if (! function_exists('\Laravel\Prompts\stream')) {
+if (! function_exists(\Laravel\Prompts\stream::class)) {
     /**
      * Display a stream of text.
      */
@@ -415,7 +415,7 @@ if (! function_exists('\Laravel\Prompts\stream')) {
     }
 }
 
-if (! function_exists('\Laravel\Prompts\task')) {
+if (! function_exists(\Laravel\Prompts\task::class)) {
     /**
      * Display a task with a spinner and live output.
      *

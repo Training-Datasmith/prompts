@@ -49,8 +49,8 @@ class NumberPromptRenderer extends Renderer
                 )
                 ->when(
                     $prompt->hint,
-                    fn () => $this->hint($prompt->hint),
-                    fn () => $this->newLine() // Space for errors
+                    fn (): \Laravel\Prompts\Themes\Default\Renderer => $this->hint($prompt->hint),
+                    fn (): \Laravel\Prompts\Themes\Default\Renderer => $this->newLine() // Space for errors
                 )
         };
     }

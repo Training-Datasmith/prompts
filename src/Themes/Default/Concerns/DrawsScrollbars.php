@@ -24,7 +24,7 @@ trait DrawsScrollbars
 
         $lines = $visible instanceof Collection ? $visible->all() : $visible;
 
-        $result = array_map(fn ($line, $index) => match ($index) {
+        $result = array_map(fn ($line, $index): string|array => match ($index) {
             $scrollPosition => preg_replace('/.$/', $this->{$color}('┃'), $this->pad($line, $width)) ?? '',
             default => preg_replace('/.$/', $this->gray('│'), $this->pad($line, $width)) ?? '',
         }, array_values($lines), range(0, count($lines) - 1));

@@ -100,8 +100,8 @@ class Stream extends Prompt
     {
         if (! static::terminal()->supportsTrueColor()) {
             return [
-                fn (string $text) => $text,
-                fn (string $text) => $this->dim($text),
+                fn (string $text): string => $text,
+                $this->dim(...),
             ];
         }
 
@@ -109,13 +109,13 @@ class Stream extends Prompt
         $bg = static::terminal()->backgroundColor();
 
         return array_map(
-            function (int $step) use ($fg, $bg, $steps) {
+            function (int $step) use ($fg, $bg, $steps): \Closure {
                 $factor = 1 - ($step / $steps);
                 $r = (int) ($bg[0] + ($fg[0] - $bg[0]) * $factor);
                 $g = (int) ($bg[1] + ($fg[1] - $bg[1]) * $factor);
                 $b = (int) ($bg[2] + ($fg[2] - $bg[2]) * $factor);
 
-                return fn (string $text) => "\e[38;2;{$r};{$g};{$b}m{$text}\e[0m";
+                return fn (string $text): string => "\e[38;2;{$r};{$g};{$b}m{$text}\e[0m";
             },
             range(0, $steps - 1),
         );
