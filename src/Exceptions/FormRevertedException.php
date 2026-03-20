@@ -1,11 +1,9 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace Laravel\Prompts\Exceptions;
 
 use RuntimeException;
-
-class FormRevertedException extends RuntimeException
+class Form_Reverted_Exception extends RuntimeException
 {
 }

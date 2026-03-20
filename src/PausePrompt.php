@@ -1,10 +1,9 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace Laravel\Prompts;
 
-class PausePrompt extends Prompt
+class Pause_Prompt extends Prompt
 {
     /**
      * Create a new PausePrompt instance.
@@ -13,13 +12,11 @@ class PausePrompt extends Prompt
     {
         $this->required = false;
         $this->validate = null;
-
-        $this->on('key', fn ($key) => match ($key) {
+        $this->on('key', fn($key) => match ($key) {
             Key::ENTER => $this->submit(),
             default => null,
         });
     }
-
     /**
      * Get the value of the prompt.
      */

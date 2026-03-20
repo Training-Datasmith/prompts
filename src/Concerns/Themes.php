@@ -1,92 +1,64 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace Laravel\Prompts\Concerns;
 
 use InvalidArgumentException;
-use Laravel\Prompts\AutoCompletePrompt;
+use Laravel\Prompts\Auto_Complete_Prompt;
 use Laravel\Prompts\Clear;
-use Laravel\Prompts\ConfirmPrompt;
+use Laravel\Prompts\Confirm_Prompt;
 use Laravel\Prompts\Grid;
-use Laravel\Prompts\MultiSearchPrompt;
-use Laravel\Prompts\MultiSelectPrompt;
+use Laravel\Prompts\Multi_Search_Prompt;
+use Laravel\Prompts\Multi_Select_Prompt;
 use Laravel\Prompts\Note;
-use Laravel\Prompts\NumberPrompt;
-use Laravel\Prompts\PasswordPrompt;
-use Laravel\Prompts\PausePrompt;
+use Laravel\Prompts\Number_Prompt;
+use Laravel\Prompts\Password_Prompt;
+use Laravel\Prompts\Pause_Prompt;
 use Laravel\Prompts\Progress;
 use Laravel\Prompts\Prompt;
-use Laravel\Prompts\SearchPrompt;
-use Laravel\Prompts\SelectPrompt;
+use Laravel\Prompts\Search_Prompt;
+use Laravel\Prompts\Select_Prompt;
 use Laravel\Prompts\Spinner;
 use Laravel\Prompts\Stream;
-use Laravel\Prompts\SuggestPrompt;
+use Laravel\Prompts\Suggest_Prompt;
 use Laravel\Prompts\Table;
 use Laravel\Prompts\Task;
-use Laravel\Prompts\TextareaPrompt;
-use Laravel\Prompts\TextPrompt;
-use Laravel\Prompts\Themes\Default\AutoCompletePromptRenderer;
-use Laravel\Prompts\Themes\Default\ClearRenderer;
-use Laravel\Prompts\Themes\Default\ConfirmPromptRenderer;
-use Laravel\Prompts\Themes\Default\GridRenderer;
-use Laravel\Prompts\Themes\Default\MultiSearchPromptRenderer;
-use Laravel\Prompts\Themes\Default\MultiSelectPromptRenderer;
-use Laravel\Prompts\Themes\Default\NoteRenderer;
-use Laravel\Prompts\Themes\Default\NumberPromptRenderer;
-use Laravel\Prompts\Themes\Default\PasswordPromptRenderer;
-use Laravel\Prompts\Themes\Default\PausePromptRenderer;
-use Laravel\Prompts\Themes\Default\ProgressRenderer;
-use Laravel\Prompts\Themes\Default\SearchPromptRenderer;
-use Laravel\Prompts\Themes\Default\SelectPromptRenderer;
-use Laravel\Prompts\Themes\Default\SpinnerRenderer;
-use Laravel\Prompts\Themes\Default\StreamRenderer;
-use Laravel\Prompts\Themes\Default\SuggestPromptRenderer;
-use Laravel\Prompts\Themes\Default\TableRenderer;
-use Laravel\Prompts\Themes\Default\TaskRenderer;
-use Laravel\Prompts\Themes\Default\TextareaPromptRenderer;
-use Laravel\Prompts\Themes\Default\TextPromptRenderer;
-use Laravel\Prompts\Themes\Default\TitleRenderer;
+use Laravel\Prompts\Textarea_Prompt;
+use Laravel\Prompts\Text_Prompt;
+use Laravel\Prompts\Themes\Default\Auto_Complete_Prompt_Renderer;
+use Laravel\Prompts\Themes\Default\Clear_Renderer;
+use Laravel\Prompts\Themes\Default\Confirm_Prompt_Renderer;
+use Laravel\Prompts\Themes\Default\Grid_Renderer;
+use Laravel\Prompts\Themes\Default\Multi_Search_Prompt_Renderer;
+use Laravel\Prompts\Themes\Default\Multi_Select_Prompt_Renderer;
+use Laravel\Prompts\Themes\Default\Note_Renderer;
+use Laravel\Prompts\Themes\Default\Number_Prompt_Renderer;
+use Laravel\Prompts\Themes\Default\Password_Prompt_Renderer;
+use Laravel\Prompts\Themes\Default\Pause_Prompt_Renderer;
+use Laravel\Prompts\Themes\Default\Progress_Renderer;
+use Laravel\Prompts\Themes\Default\Search_Prompt_Renderer;
+use Laravel\Prompts\Themes\Default\Select_Prompt_Renderer;
+use Laravel\Prompts\Themes\Default\Spinner_Renderer;
+use Laravel\Prompts\Themes\Default\Stream_Renderer;
+use Laravel\Prompts\Themes\Default\Suggest_Prompt_Renderer;
+use Laravel\Prompts\Themes\Default\Table_Renderer;
+use Laravel\Prompts\Themes\Default\Task_Renderer;
+use Laravel\Prompts\Themes\Default\Textarea_Prompt_Renderer;
+use Laravel\Prompts\Themes\Default\Text_Prompt_Renderer;
+use Laravel\Prompts\Themes\Default\Title_Renderer;
 use Laravel\Prompts\Title;
-
 trait Themes
 {
     /**
      * The name of the active theme.
      */
     protected static string $theme = 'default';
-
     /**
      * The available themes.
      *
      * @var array<string, array<class-string<Prompt>, class-string<object&callable>>>
      */
-    protected static array $themes = [
-        'default' => [
-            TextPrompt::class => TextPromptRenderer::class,
-            NumberPrompt::class => NumberPromptRenderer::class,
-            TextareaPrompt::class => TextareaPromptRenderer::class,
-            PasswordPrompt::class => PasswordPromptRenderer::class,
-            SelectPrompt::class => SelectPromptRenderer::class,
-            MultiSelectPrompt::class => MultiSelectPromptRenderer::class,
-            ConfirmPrompt::class => ConfirmPromptRenderer::class,
-            PausePrompt::class => PausePromptRenderer::class,
-            SearchPrompt::class => SearchPromptRenderer::class,
-            MultiSearchPrompt::class => MultiSearchPromptRenderer::class,
-            SuggestPrompt::class => SuggestPromptRenderer::class,
-            Spinner::class => SpinnerRenderer::class,
-            Note::class => NoteRenderer::class,
-            Table::class => TableRenderer::class,
-            Progress::class => ProgressRenderer::class,
-            Clear::class => ClearRenderer::class,
-            Grid::class => GridRenderer::class,
-            AutoCompletePrompt::class => AutoCompletePromptRenderer::class,
-            Title::class => TitleRenderer::class,
-            Stream::class => StreamRenderer::class,
-            Task::class => TaskRenderer::class,
-        ],
-    ];
-
+    protected static array $themes = ['default' => [Text_Prompt::class => Text_Prompt_Renderer::class, Number_Prompt::class => Number_Prompt_Renderer::class, Textarea_Prompt::class => Textarea_Prompt_Renderer::class, Password_Prompt::class => Password_Prompt_Renderer::class, Select_Prompt::class => Select_Prompt_Renderer::class, Multi_Select_Prompt::class => Multi_Select_Prompt_Renderer::class, Confirm_Prompt::class => Confirm_Prompt_Renderer::class, Pause_Prompt::class => Pause_Prompt_Renderer::class, Search_Prompt::class => Search_Prompt_Renderer::class, Multi_Search_Prompt::class => Multi_Search_Prompt_Renderer::class, Suggest_Prompt::class => Suggest_Prompt_Renderer::class, Spinner::class => Spinner_Renderer::class, Note::class => Note_Renderer::class, Table::class => Table_Renderer::class, Progress::class => Progress_Renderer::class, Clear::class => Clear_Renderer::class, Grid::class => Grid_Renderer::class, Auto_Complete_Prompt::class => Auto_Complete_Prompt_Renderer::class, Title::class => Title_Renderer::class, Stream::class => Stream_Renderer::class, Task::class => Task_Renderer::class]];
     /**
      * Get or set the active theme.
      *
@@ -97,45 +69,37 @@ trait Themes
         if ($name === null) {
             return static::$theme;
         }
-
-        if (! isset(static::$themes[$name])) {
+        if (!isset(static::$themes[$name])) {
             throw new InvalidArgumentException("Prompt theme [{$name}] not found.");
         }
-
         return static::$theme = $name;
     }
-
     /**
      * Add a new theme.
      *
      * @param  array<class-string<Prompt>, class-string<object&callable>>  $renderers
      */
-    public static function addTheme(string $name, array $renderers): void
+    public static function add_theme(string $name, array $renderers): void
     {
         if ($name === 'default') {
             throw new InvalidArgumentException('The default theme cannot be overridden.');
         }
-
         static::$themes[$name] = $renderers;
     }
-
     /**
      * Get the renderer for the current prompt.
      */
-    protected function getRenderer(): callable
+    protected function get_renderer(): callable
     {
         $class = $this::class;
-
         return new (static::$themes[static::$theme][$class] ?? static::$themes['default'][$class])($this);
     }
-
     /**
      * Render the prompt using the active theme.
      */
-    protected function renderTheme(): string
+    protected function render_theme(): string
     {
-        $renderer = $this->getRenderer();
-
+        $renderer = $this->get_renderer();
         return $renderer($this);
     }
 }

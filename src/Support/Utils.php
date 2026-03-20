@@ -1,11 +1,9 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace Laravel\Prompts\Support;
 
 use Closure;
-
 /**
  * @internal
  */
@@ -16,17 +14,15 @@ class Utils
      *
      * @param  array<array-key, mixed>  $values
      */
-    public static function allMatch(array $values, Closure $callback): bool
+    public static function all_match(array $values, Closure $callback): bool
     {
         foreach ($values as $key => $value) {
-            if (! $callback($value, $key)) {
+            if (!$callback($value, $key)) {
                 return false;
             }
         }
-
         return true;
     }
-
     /**
      * Get the last item from an array or null if it doesn't exist.
      *
@@ -36,7 +32,6 @@ class Utils
     {
         return array_reverse($array)[0] ?? null;
     }
-
     /**
      * Returns the key of the first element in the array that satisfies the callback.
      *
@@ -49,7 +44,6 @@ class Utils
                 return $key;
             }
         }
-
         return false;
     }
 }

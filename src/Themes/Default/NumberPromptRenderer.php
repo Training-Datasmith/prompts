@@ -1,97 +1,54 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace Laravel\Prompts\Themes\Default;
 
-use Laravel\Prompts\NumberPrompt;
-
-class NumberPromptRenderer extends Renderer
+use Laravel\Prompts\Number_Prompt;
+class Number_Prompt_Renderer extends Renderer
 {
-    use Concerns\DrawsBoxes;
-
-    protected string $upArrow = '▲';
-
-    protected string $downArrow = '▼';
-
+    use Concerns\Draws_Boxes;
+    protected string $up_arrow = '▲';
+    protected string $down_arrow = '▼';
     /**
      * Render the number prompt.
      */
-    public function __invoke(NumberPrompt $prompt): string
+    public function __invoke(Number_Prompt $prompt): string
     {
-        $maxWidth = $prompt->terminal()->cols() - 6;
-
+        $max_width = $prompt->terminal()->cols() - 6;
         return match ($prompt->state) {
-            'submit' => $this
-                ->box(
-                    $this->dim($this->truncate($prompt->label, $prompt->terminal()->cols() - 6)),
-                    $this->truncate((string) $prompt->value(), $maxWidth),
-                ),
-
-            'cancel' => $this
-                ->box(
-                    $this->truncate($prompt->label, $prompt->terminal()->cols() - 6),
-                    $this->strikethrough($this->dim($this->truncate((string) $prompt->value() ?: $prompt->placeholder, $maxWidth))),
-                    color: 'red',
-                )
-                ->error('Cancelled.'),
-
-            'error' => $this
-                ->box(
-                    $this->truncate($prompt->label, $prompt->terminal()->cols() - 6),
-                    $this->withArrows($prompt, $prompt->valueWithCursor($maxWidth), 'yellow'),
-                    color: 'yellow',
-                )
-                ->warning($this->truncate($prompt->error, $prompt->terminal()->cols() - 5)),
-
-            default => $this
-                ->box(
-                    $this->cyan($this->truncate($prompt->label, $prompt->terminal()->cols() - 6)),
-                    $this->withArrows($prompt, $prompt->valueWithCursor($maxWidth)),
-                )
-                ->when(
-                    $prompt->hint,
-                    fn (): \Laravel\Prompts\Themes\Default\Renderer => $this->hint($prompt->hint),
-                    fn (): \Laravel\Prompts\Themes\Default\Renderer => $this->newLine() // Space for errors
-                )
+            'submit' => $this->box($this->dim($this->truncate($prompt->label, $prompt->terminal()->cols() - 6)), $this->truncate((string) $prompt->value(), $max_width)),
+            'cancel' => $this->box($this->truncate($prompt->label, $prompt->terminal()->cols() - 6), $this->strikethrough($this->dim($this->truncate((string) $prompt->value() ?: $prompt->placeholder, $max_width))), color: 'red')->error('Cancelled.'),
+            'error' => $this->box($this->truncate($prompt->label, $prompt->terminal()->cols() - 6), $this->with_arrows($prompt, $prompt->value_with_cursor($max_width), 'yellow'), color: 'yellow')->warning($this->truncate($prompt->error, $prompt->terminal()->cols() - 5)),
+            default => $this->box($this->cyan($this->truncate($prompt->label, $prompt->terminal()->cols() - 6)), $this->with_arrows($prompt, $prompt->value_with_cursor($max_width)))->when($prompt->hint, fn(): \Laravel\Prompts\Themes\Default\Renderer => $this->hint($prompt->hint), fn(): \Laravel\Prompts\Themes\Default\Renderer => $this->new_line()),
         };
     }
-
-    protected function withArrows(NumberPrompt $prompt, int|string $value, ?string $color = null): string
+    protected function with_arrows(Number_Prompt $prompt, int|string $value, ?string $color = null): string
     {
-        $arrows = $this->getArrows($prompt, $color);
-        $valueLength = mb_strwidth($this->stripEscapeSequences((string) $value));
-        $padding = $this->minWidth - $valueLength - mb_strwidth($this->stripEscapeSequences($arrows));
-
-        return $value.str_repeat(' ', $padding).$arrows;
+        $arrows = $this->get_arrows($prompt, $color);
+        $value_length = mb_strwidth($this->strip_escape_sequences((string) $value));
+        $padding = $this->min_width - $value_length - mb_strwidth($this->strip_escape_sequences($arrows));
+        return $value . str_repeat(' ', $padding) . $arrows;
     }
-
-    protected function getArrows(NumberPrompt $prompt, ?string $color = null): string
+    protected function get_arrows(Number_Prompt $prompt, ?string $color = null): string
     {
-        $upArrow = $this->upArrow;
-        $downArrow = $this->downArrow;
-
+        $up_arrow = $this->up_arrow;
+        $down_arrow = $this->down_arrow;
         if ($color) {
-            $upArrow = $this->{$color}($upArrow);
-            $downArrow = $this->{$color}($downArrow);
+            $up_arrow = $this->{$color}($up_arrow);
+            $down_arrow = $this->{$color}($down_arrow);
         }
-
         if (is_numeric($prompt->value())) {
             if ((int) $prompt->value() === $prompt->min) {
-                $downArrow = $this->dim($downArrow);
+                $down_arrow = $this->dim($down_arrow);
             }
-
             if ((int) $prompt->value() === $prompt->max) {
-                $upArrow = $this->dim($upArrow);
+                $up_arrow = $this->dim($up_arrow);
             }
-
-            return $upArrow.$downArrow;
+            return $up_arrow . $down_arrow;
         }
-
         if ($prompt->value() === '') {
-            return $upArrow.$downArrow;
+            return $up_arrow . $down_arrow;
         }
-
-        return $this->dim($upArrow).$this->dim($downArrow);
+        return $this->dim($up_arrow) . $this->dim($down_arrow);
     }
 }

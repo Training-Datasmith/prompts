@@ -1,14 +1,12 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace Laravel\Prompts;
 
 use Closure;
 use InvalidArgumentException;
 use RuntimeException;
 use Throwable;
-
 /**
  * @template TSteps of iterable<mixed>|int
  */
@@ -18,17 +16,14 @@ class Progress extends Prompt
      * The current progress bar item count.
      */
     public int $progress = 0;
-
     /**
      * The total number of steps.
      */
     public int $total = 0;
-
     /**
      * The original value of pcntl_async_signals
      */
-    protected bool $originalAsync;
-
+    protected bool $original_async;
     /**
      * Create a new ProgressBar instance.
      *
@@ -44,12 +39,10 @@ class Progress extends Prompt
             /** @phpstan-ignore match.unreachable (Technically we shouldn't be able to reach the default as should be int|countable|iterable ) */
             default => throw new InvalidArgumentException('Unable to count steps.'),
         };
-
         if ($this->total === 0) {
             throw new InvalidArgumentException('Progress bar must have at least one item.');
         }
     }
-
     /**
      * Map over the steps while rendering the progress bar.
      *
@@ -63,9 +56,7 @@ class Progress extends Prompt
     public function map(Closure $callback): array
     {
         $this->start();
-
         $result = [];
-
         try {
             if (is_int($this->steps)) {
                 for ($i = 0; $i < $this->steps; $i++) {
@@ -81,58 +72,47 @@ class Progress extends Prompt
         } catch (Throwable $e) {
             $this->state = 'error';
             $this->render();
-            $this->restoreCursor();
-            $this->resetSignals();
-
+            $this->restore_cursor();
+            $this->reset_signals();
             throw $e;
         }
-
         if ($this->hint !== '') {
             // Just pause for one moment to show the final hint
             // so it doesn't look like it was skipped
-            usleep(250_000);
+            usleep(250000);
         }
-
         $this->finish();
-
         return $result;
     }
-
     /**
      * Start the progress bar.
      */
     public function start(): void
     {
-        $this->capturePreviousNewLines();
-
+        $this->capture_previous_new_lines();
         if (function_exists('pcntl_signal')) {
-            $this->originalAsync = pcntl_async_signals(true);
+            $this->original_async = pcntl_async_signals(true);
             pcntl_signal(SIGINT, function (): void {
                 $this->state = 'cancel';
                 $this->render();
-                exit();
+                exit;
             });
         }
-
-        $this->hideCursor();
+        $this->hide_cursor();
         $this->render();
         $this->state = 'active';
     }
-
     /**
      * Advance the progress bar.
      */
     public function advance(int $step = 1): void
     {
         $this->progress += $step;
-
         if ($this->progress > $this->total) {
             $this->progress = $this->total;
         }
-
         $this->render();
     }
-
     /**
      * Finish the progress bar.
      */
@@ -140,10 +120,9 @@ class Progress extends Prompt
     {
         $this->state = 'submit';
         $this->render();
-        $this->restoreCursor();
-        $this->resetSignals();
+        $this->restore_cursor();
+        $this->reset_signals();
     }
-
     /**
      * Force the progress bar to re-render.
      */
@@ -151,27 +130,22 @@ class Progress extends Prompt
     {
         parent::render();
     }
-
     /**
      * Update the label.
      */
     public function label(string $label): static
     {
         $this->label = $label;
-
         return $this;
     }
-
     /**
      * Update the hint.
      */
     public function hint(string $hint): static
     {
         $this->hint = $hint;
-
         return $this;
     }
-
     /**
      * Get the completion percentage.
      */
@@ -179,7 +153,6 @@ class Progress extends Prompt
     {
         return $this->progress / $this->total;
     }
-
     /**
      * Disable prompting for input.
      *
@@ -189,7 +162,6 @@ class Progress extends Prompt
     {
         throw new RuntimeException('Progress Bar cannot be prompted.');
     }
-
     /**
      * Get the value of the prompt.
      */
@@ -197,23 +169,21 @@ class Progress extends Prompt
     {
         return true;
     }
-
     /**
      * Reset the signal handling.
      */
-    protected function resetSignals(): void
+    protected function reset_signals(): void
     {
-        if (isset($this->originalAsync)) {
-            pcntl_async_signals($this->originalAsync);
+        if (isset($this->original_async)) {
+            pcntl_async_signals($this->original_async);
             pcntl_signal(SIGINT, SIG_DFL);
         }
     }
-
     /**
      * Restore the cursor.
      */
     public function __destruct()
     {
-        $this->restoreCursor();
+        $this->restore_cursor();
     }
 }

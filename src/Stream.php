@@ -1,125 +1,92 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace Laravel\Prompts;
 
-use Laravel\Prompts\Themes\Default\Concerns\InteractsWithStrings;
-
+use Laravel\Prompts\Themes\Default\Concerns\Interacts_With_Strings;
 class Stream extends Prompt
 {
-    use InteractsWithStrings;
-
-    protected int $minWidth = 0;
-
+    use Interacts_With_Strings;
+    protected int $min_width = 0;
     protected string $message = '';
-
     /** @var array<int, string> */
-    protected array $currentlyFading = [];
-
-    protected int $maxWidth = 0;
-
+    protected array $currently_fading = [];
+    protected int $max_width = 0;
     /** @var array<int, \Closure(string): string> */
-    protected array $fadingOutColors = [];
-
+    protected array $fading_out_colors = [];
     /**
      * Create a new Stream instance.
      */
     public function __construct()
     {
-        $this->maxWidth = static::terminal()->cols() - 20;
-        $this->hideCursor();
-        $this->fadingOutColors = $this->fadeOut();
+        $this->max_width = static::terminal()->cols() - 20;
+        $this->hide_cursor();
+        $this->fading_out_colors = $this->fade_out();
     }
-
     public function append(string $message): self
     {
-        $this->currentlyFading[] = $message;
-
-        while (count($this->currentlyFading) > count($this->fadingOutColors)) {
-            $this->message .= array_shift($this->currentlyFading);
+        $this->currently_fading[] = $message;
+        while (count($this->currently_fading) > count($this->fading_out_colors)) {
+            $this->message .= array_shift($this->currently_fading);
         }
-
         $this->render();
-
         return $this;
     }
-
     public function close(): void
     {
         try {
-            while (count($this->currentlyFading) > 0) {
-                $this->message .= array_shift($this->currentlyFading);
+            while (count($this->currently_fading) > 0) {
+                $this->message .= array_shift($this->currently_fading);
                 $this->render();
-                usleep(25_000);
+                usleep(25000);
             }
         } finally {
-            $this->showCursor();
+            $this->show_cursor();
         }
     }
-
     /** @return array<int, string> */
     public function lines(): array
     {
-        $toFadeIn = [];
-
-        foreach ($this->currentlyFading as $index => $message) {
-            $toFadeIn[] = $this->fadingOutColors[$index]($message);
+        $to_fade_in = [];
+        foreach ($this->currently_fading as $index => $message) {
+            $to_fade_in[] = $this->fading_out_colors[$index]($message);
         }
-
-        $lines = explode(PHP_EOL, $this->message.implode('', $toFadeIn));
-        $finalLines = [];
-
+        $lines = explode(PHP_EOL, $this->message . implode('', $to_fade_in));
+        $final_lines = [];
         foreach ($lines as $line) {
-            $finalLines = array_merge(
-                $finalLines,
-                $this->ansiWordwrap($line, $this->maxWidth),
-            );
+            $final_lines = array_merge($final_lines, $this->ansi_wordwrap($line, $this->max_width));
         }
-
-        return $finalLines;
+        return $final_lines;
     }
-
     public function prompt(): mixed
     {
         throw new \RuntimeException('Stream cannot be prompted');
     }
-
     /**
      * Get the value of the prompt.
      */
     public function value(): string
     {
-        return $this->message.implode('', $this->currentlyFading);
+        return $this->message . implode('', $this->currently_fading);
     }
-
     /**
      * Get an array of closures that progressively fade text from full color to nearly invisible.
      *
      * @return array<int, \Closure(string): string>
      */
-    protected function fadeOut(int $steps = 10): array
+    protected function fade_out(int $steps = 10): array
     {
-        if (! static::terminal()->supportsTrueColor()) {
-            return [
-                fn (string $text): string => $text,
-                $this->dim(...),
-            ];
+        if (!static::terminal()->supports_true_color()) {
+            return [fn(string $text): string => $text, $this->dim(...)];
         }
-
-        $fg = static::terminal()->foregroundColor();
-        $bg = static::terminal()->backgroundColor();
-
-        return array_map(
-            function (int $step) use ($fg, $bg, $steps): \Closure {
-                $factor = 1 - ($step / $steps);
-                $r = (int) ($bg[0] + ($fg[0] - $bg[0]) * $factor);
-                $g = (int) ($bg[1] + ($fg[1] - $bg[1]) * $factor);
-                $b = (int) ($bg[2] + ($fg[2] - $bg[2]) * $factor);
-
-                return fn (string $text): string => "\e[38;2;{$r};{$g};{$b}m{$text}\e[0m";
-            },
-            range(0, $steps - 1),
-        );
+        $fg = static::terminal()->foreground_color();
+        $bg = static::terminal()->background_color();
+        return array_map(function (int $step) use ($fg, $bg, $steps): \Closure {
+            $factor = 1 - $step / $steps;
+            $r = (int) ($bg[0] + ($fg[0] - $bg[0]) * $factor);
+            $g = (int) ($bg[1] + ($fg[1] - $bg[1]) * $factor);
+            $b = (int) ($bg[2] + ($fg[2] - $bg[2]) * $factor);
+            return fn(string $text): string => "\x1b[38;2;{$r};{$g};{$b}m{$text}\x1b[0m";
+        }, range(0, $steps - 1));
     }
 }

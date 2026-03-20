@@ -1,11 +1,9 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace Laravel\Prompts;
 
 use Illuminate\Support\Collection;
-
 class Grid extends Prompt
 {
     /**
@@ -14,23 +12,20 @@ class Grid extends Prompt
      * @var array<int, string>
      */
     public array $items;
-
     /**
      * The maximum width of the grid.
      */
-    public int $maxWidth;
-
+    public int $max_width;
     /**
      * Create a new Grid instance.
      *
      * @param  array<int, string>|Collection<int, string>  $items
      */
-    public function __construct(array|Collection $items = [], ?int $maxWidth = null)
+    public function __construct(array|Collection $items = [], ?int $max_width = null)
     {
         $this->items = $items instanceof Collection ? $items->all() : $items;
-        $this->maxWidth = $maxWidth ?? static::terminal()->cols() ?: 80;
+        $this->max_width = $max_width ?? static::terminal()->cols() ?: 80;
     }
-
     /**
      * Display the grid.
      */
@@ -38,7 +33,6 @@ class Grid extends Prompt
     {
         $this->prompt();
     }
-
     /**
      * Display the grid.
      */
@@ -47,16 +41,11 @@ class Grid extends Prompt
         if ($this->items === []) {
             return true;
         }
-
-        $this->capturePreviousNewLines();
-
+        $this->capture_previous_new_lines();
         $this->state = 'submit';
-
-        static::output()->write($this->renderTheme());
-
+        static::output()->write($this->render_theme());
         return true;
     }
-
     /**
      * Get the value of the prompt.
      */

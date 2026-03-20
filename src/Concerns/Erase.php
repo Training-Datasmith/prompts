@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace Laravel\Prompts\Concerns;
 
 trait Erase
@@ -9,25 +8,22 @@ trait Erase
     /**
      * Erase the given number of lines downwards from the cursor position.
      */
-    public function eraseLines(int $count): void
+    public function erase_lines(int $count): void
     {
         $clear = '';
         for ($i = 0; $i < $count; $i++) {
-            $clear .= "\e[2K".($i < $count - 1 ? "\e[{$count}A" : '');
+            $clear .= "\x1b[2K" . ($i < $count - 1 ? "\x1b[{$count}A" : '');
         }
-
         if ($count) {
-            $clear .= "\e[G";
+            $clear .= "\x1b[G";
         }
-
-        static::writeDirectly($clear);
+        static::write_directly($clear);
     }
-
     /**
      * Erase from cursor until end of screen.
      */
-    public function eraseDown(): void
+    public function erase_down(): void
     {
-        static::writeDirectly("\e[J");
+        static::write_directly("\x1b[J");
     }
 }

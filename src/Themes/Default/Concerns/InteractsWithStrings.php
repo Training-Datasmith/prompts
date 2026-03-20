@@ -1,10 +1,9 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace Laravel\Prompts\Themes\Default\Concerns;
 
-trait InteractsWithStrings
+trait Interacts_With_Strings
 {
     /**
      * Get the length of the longest line.
@@ -13,71 +12,52 @@ trait InteractsWithStrings
      */
     protected function longest(array $lines, int $padding = 0): int
     {
-        return max(
-            $this->minWidth,
-            count($lines) > 0 ? max(array_map(fn ($line): int => mb_strwidth($this->stripEscapeSequences($line)) + $padding, $lines)) : null
-        );
+        return max($this->min_width, count($lines) > 0 ? max(array_map(fn($line): int => mb_strwidth($this->strip_escape_sequences($line)) + $padding, $lines)) : null);
     }
-
     /**
      * Pad text ignoring ANSI escape sequences.
      */
     protected function pad(string $text, int $length, string $char = ' '): string
     {
-        $rightPadding = str_repeat($char, max(0, $length - mb_strwidth($this->stripEscapeSequences($text))));
-
-        return "{$text}{$rightPadding}";
+        $right_padding = str_repeat($char, max(0, $length - mb_strwidth($this->strip_escape_sequences($text))));
+        return "{$text}{$right_padding}";
     }
-
     /**
      * Strip ANSI escape sequences from the given text.
      */
-    protected function stripEscapeSequences(string $text): string
+    protected function strip_escape_sequences(string $text): string
     {
         // Strip ANSI escape sequences.
-        $text = preg_replace("/\e[^m]*m/", '', $text);
-
+        $text = preg_replace("/\x1b[^m]*m/", '', $text);
         // Strip Symfony named style tags.
-        $text = preg_replace("/<(info|comment|question|error)>(.*?)<\/\\1>/", '$2', (string) $text);
-
+        $text = preg_replace("/<(info|comment|question|error)>(.*?)<\\/\\1>/", '$2', (string) $text);
         // Strip Symfony inline style tags.
-        return preg_replace("/<(?:(?:[fb]g|options)=[a-z,;]+)+>(.*?)<\/>/i", '$1', (string) $text);
+        return preg_replace("/<(?:(?:[fb]g|options)=[a-z,;]+)+>(.*?)<\\/>/i", '$1', (string) $text);
     }
-
     /**
      * Multi-byte version of wordwrap.
      *
      * @param  non-empty-string  $break
      */
-    protected function mbWordwrap(
-        string $string,
-        int $width = 75,
-        string $break = "\n",
-        bool $cut_long_words = false
-    ): string {
+    protected function mb_wordwrap(string $string, int $width = 75, string $break = "\n", bool $cut_long_words = false): string
+    {
         $lines = explode($break, $string);
         $result = [];
-
-        foreach ($lines as $originalLine) {
-            if (mb_strwidth($originalLine) <= $width) {
-                $result[] = $originalLine;
-
+        foreach ($lines as $original_line) {
+            if (mb_strwidth($original_line) <= $width) {
+                $result[] = $original_line;
                 continue;
             }
-
-            $words = explode(' ', $originalLine);
+            $words = explode(' ', $original_line);
             $line = null;
-            $lineWidth = 0;
-
+            $line_width = 0;
             if ($cut_long_words) {
                 foreach ($words as $index => $word) {
                     $characters = mb_str_split($word);
                     $strings = [];
                     $str = '';
-
                     foreach ($characters as $character) {
-                        $tmp = $str.$character;
-
+                        $tmp = $str . $character;
                         if (mb_strwidth($tmp) > $width) {
                             $strings[] = $str;
                             $str = $character;
@@ -85,178 +65,143 @@ trait InteractsWithStrings
                             $str = $tmp;
                         }
                     }
-
                     if ($str !== '') {
                         $strings[] = $str;
                     }
-
                     $words[$index] = implode(' ', $strings);
                 }
-
                 $words = explode(' ', implode(' ', $words));
             }
-
             foreach ($words as $word) {
-                $tmp = ($line === null) ? $word : $line.' '.$word;
-
+                $tmp = $line === null ? $word : $line . ' ' . $word;
                 // Look for zero-width joiner characters (combined emojis)
-                preg_match('/\p{Cf}/u', $word, $joinerMatches);
-
-                $wordWidth = count($joinerMatches) > 0 ? 2 : mb_strwidth($word);
-
-                $lineWidth += $wordWidth;
-
+                preg_match('/\p{Cf}/u', $word, $joiner_matches);
+                $word_width = count($joiner_matches) > 0 ? 2 : mb_strwidth($word);
+                $line_width += $word_width;
                 if ($line !== null) {
                     // Space between words
-                    $lineWidth += 1;
+                    $line_width += 1;
                 }
-
-                if ($lineWidth <= $width) {
+                if ($line_width <= $width) {
                     $line = $tmp;
                 } else {
                     $result[] = $line;
                     $line = $word;
-                    $lineWidth = $wordWidth;
+                    $line_width = $word_width;
                 }
             }
-
             if ($line !== '') {
                 $result[] = $line;
             }
-
             $line = null;
         }
-
         return implode($break, $result);
     }
-
     /**
      * Word wrap text while preserving ANSI escape sequences.
      *
      * @return array<int, string>
      */
-    protected function ansiWordwrap(string $text, int $width): array
+    protected function ansi_wordwrap(string $text, int $width): array
     {
         // Parse segments and build character array with codes
-        $segments = $this->parseAnsiText($text);
-        $plainText = $this->stripEscapeSequences($text);
+        $segments = $this->parse_ansi_text($text);
+        $plain_text = $this->strip_escape_sequences($text);
         $chars = [];
-
         foreach ($segments as $segment) {
-            $segmentChars = mb_str_split((string) $segment['text']);
-
-            foreach ($segmentChars as $char) {
+            $segment_chars = mb_str_split((string) $segment['text']);
+            foreach ($segment_chars as $char) {
                 $chars[] = ['char' => $char, 'codes' => $segment['codes']];
             }
         }
-
         // Word wrap the plain text
-        $wrappedLines = $this->mbWordwrap($plainText, $width, "\n", false);
-        $plainLines = explode("\n", $wrappedLines);
-
+        $wrapped_lines = $this->mb_wordwrap($plain_text, $width, "\n", false);
+        $plain_lines = explode("\n", $wrapped_lines);
         // Rebuild each wrapped line with ANSI codes
         $result = [];
-        $charIndex = 0;
-
-        foreach ($plainLines as $plainLine) {
+        $char_index = 0;
+        foreach ($plain_lines as $plain_line) {
             $line = '';
-            $lastCodes = '';
-            $lineChars = mb_str_split($plainLine);
-
-            foreach ($lineChars as $lineChar) {
+            $last_codes = '';
+            $line_chars = mb_str_split($plain_line);
+            foreach ($line_chars as $line_char) {
                 // Find matching character in original (handling spaces removed by wordwrap)
-                while ($charIndex < count($chars) && $chars[$charIndex]['char'] !== $lineChar) {
+                while ($char_index < count($chars) && $chars[$char_index]['char'] !== $line_char) {
                     // Skip spaces that wordwrap removed
-                    if ($chars[$charIndex]['char'] === ' ') {
-                        $charIndex++;
+                    if ($chars[$char_index]['char'] === ' ') {
+                        $char_index++;
                     } else {
                         break;
                     }
                 }
-
-                if ($charIndex < count($chars)) {
-                    $codes = $chars[$charIndex]['codes'];
-
-                    if ($codes !== $lastCodes) {
-                        if ($lastCodes !== '') {
-                            $line .= "\e[0m";
+                if ($char_index < count($chars)) {
+                    $codes = $chars[$char_index]['codes'];
+                    if ($codes !== $last_codes) {
+                        if ($last_codes !== '') {
+                            $line .= "\x1b[0m";
                         }
-
                         if ($codes !== '') {
                             $line .= $codes;
                         }
-
-                        $lastCodes = $codes;
+                        $last_codes = $codes;
                     }
-
-                    $line .= $lineChar;
-                    $charIndex++;
+                    $line .= $line_char;
+                    $char_index++;
                 } else {
-                    $line .= $lineChar;
+                    $line .= $line_char;
                 }
             }
-
             // Close any open ANSI codes
-            if ($lastCodes !== '' && ! str_ends_with($line, "\e[0m")) {
-                $line .= "\e[0m";
+            if ($last_codes !== '' && !str_ends_with($line, "\x1b[0m")) {
+                $line .= "\x1b[0m";
             }
-
             $result[] = $line;
         }
-
         return $result;
     }
-
     /**
      * Parse text into segments with their associated ANSI codes.
      *
      * @return array<int, array{text: string, codes: string}>
      */
-    protected function parseAnsiText(string $text): array
+    protected function parse_ansi_text(string $text): array
     {
         $segments = [];
-        $currentCodes = '';
-        $currentText = '';
+        $current_codes = '';
+        $current_text = '';
         $i = 0;
-        $textLength = strlen($text);
-
-        while ($i < $textLength) {
-            if ($text[$i] === "\e" && ($i + 1 < $textLength) && $text[$i + 1] === '[') {
+        $text_length = strlen($text);
+        while ($i < $text_length) {
+            if ($text[$i] === "\x1b" && $i + 1 < $text_length && $text[$i + 1] === '[') {
                 // Save current segment if it has text
-                if ($currentText !== '') {
-                    $segments[] = ['text' => $currentText, 'codes' => $currentCodes];
-                    $currentText = '';
+                if ($current_text !== '') {
+                    $segments[] = ['text' => $current_text, 'codes' => $current_codes];
+                    $current_text = '';
                 }
-
                 // Extract ANSI escape sequence
-                $escapeSequence = '';
-                while ($i < $textLength) {
-                    $escapeSequence .= $text[$i];
+                $escape_sequence = '';
+                while ($i < $text_length) {
+                    $escape_sequence .= $text[$i];
                     $i++;
-
-                    if (preg_match('/^\\e\\[[0-9;]*m$/', $escapeSequence)) {
+                    if (preg_match('/^\e\[[0-9;]*m$/', $escape_sequence)) {
                         // Update current codes
-                        if ($escapeSequence === "\e[0m") {
-                            $currentCodes = '';
+                        if ($escape_sequence === "\x1b[0m") {
+                            $current_codes = '';
                         } else {
-                            $currentCodes = $escapeSequence;
+                            $current_codes = $escape_sequence;
                         }
                         break;
                     }
                 }
-
                 continue;
             }
-
-            $currentText .= $text[$i];
+            $current_text .= $text[$i];
             $i++;
         }
-
         // Add final segment
-        if ($currentText !== '') {
-            $segments[] = ['text' => $currentText, 'codes' => $currentCodes];
+        if ($current_text !== '') {
+            $segments[] = ['text' => $current_text, 'codes' => $current_codes];
         }
-
         return $segments;
     }
 }

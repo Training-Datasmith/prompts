@@ -1,16 +1,14 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace Laravel\Prompts\Output;
 
-class BufferedConsoleOutput extends ConsoleOutput
+class Buffered_Console_Output extends Console_Output
 {
     /**
      * The output buffer.
      */
     protected string $buffer = '';
-
     /**
      * Empties the buffer and returns its content.
      */
@@ -18,10 +16,8 @@ class BufferedConsoleOutput extends ConsoleOutput
     {
         $content = $this->buffer;
         $this->buffer = '';
-
         return $content;
     }
-
     /**
      * Return the content of the buffer.
      */
@@ -29,24 +25,21 @@ class BufferedConsoleOutput extends ConsoleOutput
     {
         return $this->buffer;
     }
-
     /**
      * Write to the output buffer.
      */
-    protected function doWrite(string $message, bool $newline): void
+    protected function do_write(string $message, bool $newline): void
     {
         $this->buffer .= $message;
-
         if ($newline) {
             $this->buffer .= \PHP_EOL;
         }
     }
-
     /**
      * Write output directly, bypassing newline capture.
      */
-    public function writeDirectly(string $message): void
+    public function write_directly(string $message): void
     {
-        $this->doWrite($message, false);
+        $this->do_write($message, false);
     }
 }

@@ -1,42 +1,34 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace Laravel\Prompts;
 
 use Closure;
 use RuntimeException;
-
 class Spinner extends Prompt
 {
     /**
      * How long to wait between rendering each frame.
      */
     public int $interval = 100;
-
     /**
      * The number of times the spinner has been rendered.
      */
     public int $count = 0;
-
     /**
      * Whether the spinner can only be rendered once.
      */
     public bool $static = false;
-
     /**
      * The process ID after forking.
      */
     protected int $pid;
-
     /**
      * Create a new Spinner instance.
      */
     public function __construct(public string $message = '')
     {
-
     }
-
     /**
      * Render the spinner and execute the callback.
      *
@@ -47,55 +39,42 @@ class Spinner extends Prompt
      */
     public function spin(Closure $callback): mixed
     {
-        $this->capturePreviousNewLines();
-
-        if (! function_exists('pcntl_fork')) {
-            return $this->renderStatically($callback);
+        $this->capture_previous_new_lines();
+        if (!function_exists('pcntl_fork')) {
+            return $this->render_statically($callback);
         }
-
-        $originalAsync = pcntl_async_signals(true);
-
-        pcntl_signal(SIGINT, fn () => exit());
-
+        $original_async = pcntl_async_signals(true);
+        pcntl_signal(SIGINT, fn() => exit);
         try {
-            $this->hideCursor();
+            $this->hide_cursor();
             $this->render();
-
             $this->pid = pcntl_fork();
-
             if ($this->pid === 0) {
-                while (true) { // @phpstan-ignore-line
+                while (true) {
+                    // @phpstan-ignore-line
                     $this->render();
-
                     $this->count++;
-
                     usleep($this->interval * 1000);
                 }
             } else {
                 $result = $callback();
-
-                $this->resetTerminal($originalAsync);
-
+                $this->reset_terminal($original_async);
                 return $result;
             }
         } catch (\Throwable $e) {
-            $this->resetTerminal($originalAsync);
-
+            $this->reset_terminal($original_async);
             throw $e;
         }
     }
-
     /**
      * Reset the terminal.
      */
-    protected function resetTerminal(bool $originalAsync): void
+    protected function reset_terminal(bool $original_async): void
     {
-        pcntl_async_signals($originalAsync);
+        pcntl_async_signals($original_async);
         pcntl_signal(SIGINT, SIG_DFL);
-
-        $this->eraseRenderedLines();
+        $this->erase_rendered_lines();
     }
-
     /**
      * Render a static version of the spinner.
      *
@@ -104,22 +83,18 @@ class Spinner extends Prompt
      * @param  Closure(): TReturn  $callback
      * @return TReturn
      */
-    protected function renderStatically(Closure $callback): mixed
+    protected function render_statically(Closure $callback): mixed
     {
         $this->static = true;
-
         try {
-            $this->hideCursor();
+            $this->hide_cursor();
             $this->render();
-
             $result = $callback();
         } finally {
-            $this->eraseRenderedLines();
+            $this->erase_rendered_lines();
         }
-
         return $result;
     }
-
     /**
      * Disable prompting for input.
      *
@@ -129,7 +104,6 @@ class Spinner extends Prompt
     {
         throw new RuntimeException('Spinner cannot be prompted.');
     }
-
     /**
      * Get the current value of the prompt.
      */
@@ -137,26 +111,23 @@ class Spinner extends Prompt
     {
         return true;
     }
-
     /**
      * Clear the lines rendered by the spinner.
      */
-    protected function eraseRenderedLines(): void
+    protected function erase_rendered_lines(): void
     {
-        $lines = explode(PHP_EOL, $this->prevFrame);
-        $this->moveCursor(-999, -count($lines) + 1);
-        $this->eraseDown();
+        $lines = explode(PHP_EOL, $this->prev_frame);
+        $this->move_cursor(-999, -count($lines) + 1);
+        $this->erase_down();
     }
-
     /**
      * Clean up after the spinner.
      */
     public function __destruct()
     {
-        if (! empty($this->pid)) {
+        if (!empty($this->pid)) {
             posix_kill($this->pid, SIGHUP);
         }
-
         parent::__destruct();
     }
 }

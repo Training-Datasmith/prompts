@@ -1,11 +1,9 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace Laravel\Prompts;
 
 use Illuminate\Support\Collection;
-
 class Table extends Prompt
 {
     /**
@@ -14,14 +12,12 @@ class Table extends Prompt
      * @var array<int, string|array<int, string>>
      */
     public array $headers;
-
     /**
      * The table rows.
      *
      * @var array<int, array<int, string>>
      */
     public array $rows;
-
     /**
      * Create a new Table instance.
      *
@@ -36,11 +32,9 @@ class Table extends Prompt
             $rows = $headers;
             $headers = [];
         }
-
         $this->headers = $headers instanceof Collection ? $headers->all() : $headers;
         $this->rows = $rows instanceof Collection ? $rows->all() : $rows;
     }
-
     /**
      * Display the table.
      */
@@ -48,21 +42,16 @@ class Table extends Prompt
     {
         $this->prompt();
     }
-
     /**
      * Display the table.
      */
     public function prompt(): bool
     {
-        $this->capturePreviousNewLines();
-
+        $this->capture_previous_new_lines();
         $this->state = 'submit';
-
-        static::output()->write($this->renderTheme());
-
+        static::output()->write($this->render_theme());
         return true;
     }
-
     /**
      * Get the value of the prompt.
      */

@@ -1,21 +1,17 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace Laravel\Prompts\Themes\Default;
 
 use Laravel\Prompts\Grid;
-use Laravel\Prompts\Output\BufferedConsoleOutput;
+use Laravel\Prompts\Output\Buffered_Console_Output;
 use Symfony\Component\Console\Helper\Table as SymfonyTable;
-use Symfony\Component\Console\Helper\TableSeparator;
-use Symfony\Component\Console\Helper\TableStyle;
-
-class GridRenderer extends Renderer
+use Symfony\Component\Console\Helper\Table_Separator;
+use Symfony\Component\Console\Helper\Table_Style;
+class Grid_Renderer extends Renderer
 {
-    use Concerns\InteractsWithStrings;
-
-    protected int $minWidth = 60;
-
+    use Concerns\Interacts_With_Strings;
+    protected int $min_width = 60;
     /**
      * Render the grid.
      */
@@ -24,54 +20,35 @@ class GridRenderer extends Renderer
         if (empty($grid->items)) {
             return $this;
         }
-
-        $maxWidth = $grid->maxWidth - 2;
-        $cellWidth = max(array_map(fn (string $item): int => mb_strwidth($this->stripEscapeSequences($item)), $grid->items)) + 4;
-        $maxColumns = max(1, (int) floor(($maxWidth - 1) / ($cellWidth + 1)));
-        $columnCount = max(1, $this->balancedColumnCount(count($grid->items), $maxColumns));
-
-        $rows = $this->buildRowsWithSeparators($grid->items, $columnCount);
-
-        $tableStyle = (new TableStyle())
-            ->setHorizontalBorderChars('─')
-            ->setVerticalBorderChars('│', '│')
-            ->setCellRowFormat('<fg=default>%s</>')
-            ->setCrossingChars('┼', '', '', '', '┤', '┘', '┴', '└', '├', '┌', '┬', '┐');
-
-        $buffered = new BufferedConsoleOutput();
-
-        (new SymfonyTable($buffered))
-            ->setRows($rows)
-            ->setStyle($tableStyle)
-            ->render();
-
+        $max_width = $grid->max_width - 2;
+        $cell_width = max(array_map(fn(string $item): int => mb_strwidth($this->strip_escape_sequences($item)), $grid->items)) + 4;
+        $max_columns = max(1, (int) floor(($max_width - 1) / ($cell_width + 1)));
+        $column_count = max(1, $this->balanced_column_count(count($grid->items), $max_columns));
+        $rows = $this->build_rows_with_separators($grid->items, $column_count);
+        $table_style = (new Table_Style())->set_horizontal_border_chars('─')->set_vertical_border_chars('│', '│')->set_cell_row_format('<fg=default>%s</>')->set_crossing_chars('┼', '', '', '', '┤', '┘', '┴', '└', '├', '┌', '┬', '┐');
+        $buffered = new Buffered_Console_Output();
+        (new Symfony_Table($buffered))->set_rows($rows)->set_style($table_style)->render();
         foreach (explode(PHP_EOL, trim($buffered->content(), PHP_EOL)) as $line) {
-            $this->line(' '.$line);
+            $this->line(' ' . $line);
         }
-
         return $this;
     }
-
     /**
      * Calculate a balanced column count for even row distribution.
      */
-    protected function balancedColumnCount(int $itemCount, int $maxColumns): int
+    protected function balanced_column_count(int $item_count, int $max_columns): int
     {
-        if ($itemCount <= $maxColumns) {
-            return $itemCount;
+        if ($item_count <= $max_columns) {
+            return $item_count;
         }
-
-        for ($cols = $maxColumns; $cols >= 1; $cols--) {
-            $remainder = $itemCount % $cols;
-
+        for ($cols = $max_columns; $cols >= 1; $cols--) {
+            $remainder = $item_count % $cols;
             if ($remainder === 0 || $remainder >= (int) ceil($cols / 2)) {
                 return $cols;
             }
         }
-
-        return $maxColumns;
+        return $max_columns;
     }
-
     /**
      * Build rows with separators between them.
      *
@@ -79,19 +56,16 @@ class GridRenderer extends Renderer
      * @param  int<1, max>  $columnCount
      * @return array<int, array<int, string>|TableSeparator>
      */
-    protected function buildRowsWithSeparators(array $items, int $columnCount): array
+    protected function build_rows_with_separators(array $items, int $column_count): array
     {
-        $chunks = array_chunk($items, $columnCount);
+        $chunks = array_chunk($items, $column_count);
         $rows = [];
-
         foreach ($chunks as $index => $chunk) {
             if ($index > 0) {
-                $rows[] = new TableSeparator();
+                $rows[] = new Table_Separator();
             }
-
-            $rows[] = array_pad($chunk, $columnCount, '');
+            $rows[] = array_pad($chunk, $column_count, '');
         }
-
         return $rows;
     }
 }

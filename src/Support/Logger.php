@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace Laravel\Prompts\Support;
 
 class Logger
@@ -13,14 +12,11 @@ class Logger
      */
     public function __construct(protected string $identifier, protected $socket = null)
     {
-
     }
-
     /**
      * The buffer for streaming text.
      */
-    protected string $streamBuffer = '';
-
+    protected string $stream_buffer = '';
     /**
      * Log a line to the process log.
      */
@@ -28,25 +24,22 @@ class Logger
     {
         $this->write(rtrim($message));
     }
-
     /**
      * Append a chunk of text, accumulating on the current line(s).
      */
     public function partial(string $chunk): void
     {
-        $this->streamBuffer .= $chunk;
-        $this->write($this->streamBuffer, 'partial');
+        $this->stream_buffer .= $chunk;
+        $this->write($this->stream_buffer, 'partial');
     }
-
     /**
      * Commit the accumulated partial text and start fresh.
      */
-    public function commitPartial(): void
+    public function commit_partial(): void
     {
-        $this->streamBuffer = '';
+        $this->stream_buffer = '';
         $this->write('', 'commitpartial');
     }
-
     /**
      * Log a success message to the process log.
      */
@@ -54,7 +47,6 @@ class Logger
     {
         $this->write($message, 'success');
     }
-
     /**
      * Log a warning message to the process log.
      */
@@ -62,7 +54,6 @@ class Logger
     {
         $this->write($message, 'warning');
     }
-
     /**
      * Log an error message to the process log.
      */
@@ -70,7 +61,6 @@ class Logger
     {
         $this->write($message, 'error');
     }
-
     /**
      * Update the label of the process log.
      */
@@ -78,24 +68,22 @@ class Logger
     {
         $this->write($message, 'label');
     }
-
     /**
      * Write a message to the socket.
      */
     protected function write(string $message, ?string $type = null): void
     {
         if ($type !== null) {
-            fwrite($this->socket, $this->prefix($type, $message).PHP_EOL);
+            fwrite($this->socket, $this->prefix($type, $message) . PHP_EOL);
         } else {
-            fwrite($this->socket, $message.PHP_EOL);
+            fwrite($this->socket, $message . PHP_EOL);
         }
     }
-
     /**
      * Prefix a message with the identifier and type.
      */
     protected function prefix(string $type, string $message): string
     {
-        return $this->identifier.'_'.$type.':'.rtrim($message, PHP_EOL);
+        return $this->identifier . '_' . $type . ':' . rtrim($message, PHP_EOL);
     }
 }

@@ -1,18 +1,15 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace Laravel\Prompts\Concerns;
 
-use Laravel\Prompts\Exceptions\NonInteractiveValidationException;
-
+use Laravel\Prompts\Exceptions\Non_Interactive_Validation_Exception;
 trait Interactivity
 {
     /**
      * Whether to render the prompt interactively.
      */
     protected static bool $interactive;
-
     /**
      * Set interactive mode.
      */
@@ -20,20 +17,16 @@ trait Interactivity
     {
         static::$interactive = $interactive;
     }
-
     /**
      * Return the default value if it passes validation.
      */
     protected function default(): mixed
     {
         $default = $this->value();
-
         $this->validate($default);
-
         if ($this->state === 'error') {
-            throw new NonInteractiveValidationException($this->error);
+            throw new Non_Interactive_Validation_Exception($this->error);
         }
-
         return $default;
     }
 }

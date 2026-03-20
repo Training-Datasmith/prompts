@@ -1,12 +1,10 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace Laravel\Prompts\Themes\Default;
 
 use Laravel\Prompts\Stream;
-
-class StreamRenderer extends Renderer
+class Stream_Renderer extends Renderer
 {
     /**
      * Render the stream.
@@ -16,7 +14,6 @@ class StreamRenderer extends Renderer
         foreach ($stream->lines() as $line) {
             $this->line(" {$line}");
         }
-
         return $this;
     }
 }

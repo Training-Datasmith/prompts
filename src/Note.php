@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace Laravel\Prompts;
 
 class Note extends Prompt
@@ -11,9 +10,7 @@ class Note extends Prompt
      */
     public function __construct(public string $message, public ?string $type = null)
     {
-
     }
-
     /**
      * Display the note.
      */
@@ -21,25 +18,19 @@ class Note extends Prompt
     {
         $this->prompt();
     }
-
     /**
      * Display the note.
      */
     public function prompt(): bool
     {
-        $this->capturePreviousNewLines();
-
-        if (static::shouldFallback()) {
+        $this->capture_previous_new_lines();
+        if (static::should_fallback()) {
             return $this->fallback();
         }
-
         $this->state = 'submit';
-
-        static::output()->write($this->renderTheme());
-
+        static::output()->write($this->render_theme());
         return true;
     }
-
     /**
      * Get the value of the prompt.
      */

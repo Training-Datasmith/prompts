@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace Laravel\Prompts;
 
 class Clear extends Prompt
@@ -12,13 +11,10 @@ class Clear extends Prompt
     public function prompt(): bool
     {
         // Fill the previous newline count so subsequent prompts won't add padding.
-        static::output()->write(PHP_EOL.PHP_EOL);
-
-        $this->writeDirectly($this->renderTheme());
-
+        static::output()->write(PHP_EOL . PHP_EOL);
+        $this->write_directly($this->render_theme());
         return true;
     }
-
     /**
      * Clear the terminal.
      */
@@ -26,7 +22,6 @@ class Clear extends Prompt
     {
         $this->prompt();
     }
-
     /**
      * Get the value of the prompt.
      */
